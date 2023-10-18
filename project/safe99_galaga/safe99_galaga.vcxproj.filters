@@ -1,0 +1,165 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="safe99">
+      <UniqueIdentifier>{5094788f-a490-477e-970d-9c2eb92a0d44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_soft_renderer_2d">
+      <UniqueIdentifier>{ec0c6033-f681-46bc-b291-d7b3bb2c9c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_common">
+      <UniqueIdentifier>{36c5d763-4c08-4e1e-930c-deb3ad91948c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_ecs">
+      <UniqueIdentifier>{22070075-3e1b-4586-b688-e07b5dec30bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_file_system">
+      <UniqueIdentifier>{3d704a6a-3a84-4c30-b549-b2938adf3584}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_generic">
+      <UniqueIdentifier>{ebd42a2c-2de4-40fd-8a57-e59ee1a46aa1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_generic\util">
+      <UniqueIdentifier>{8a1b63aa-cf8d-49b3-81eb-74ca82f133fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99\safe99_math">
+      <UniqueIdentifier>{0216a290-39af-41f7-9575-d5cb270fd410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99_galaga">
+      <UniqueIdentifier>{afe819cd-4017-4063-b092-897fa356e315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99_galaga\private">
+      <UniqueIdentifier>{5eea2f58-aa8a-4fd9-909a-2da8224b5ea0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99_galaga\component">
+      <UniqueIdentifier>{ece5fe18-3dc8-45b2-b685-0cb9509b4f9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="safe99_galaga\system">
+      <UniqueIdentifier>{26fa3e57-c367-420a-83af-e23a6a19704f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\source\safe99\safe99_soft_renderer_2d\i_soft_renderer_2d.h">
+      <Filter>safe99\safe99_soft_renderer_2d</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\color.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\math.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\math_defines.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\math_misc.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\matrix.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_math\vector.h">
+      <Filter>safe99\safe99_math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\i_chunked_memory_pool.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\i_dynamic_vector.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\i_fixed_vector.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\i_map.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\i_static_memory_pool.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\list.h">
+      <Filter>safe99\safe99_generic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\util\hash_function.h">
+      <Filter>safe99\safe99_generic\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\util\stop_watch.h">
+      <Filter>safe99\safe99_generic\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_generic\util\timer.h">
+      <Filter>safe99\safe99_generic\util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_file_system\i_file_system.h">
+      <Filter>safe99\safe99_file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_ecs\i_ecs.h">
+      <Filter>safe99\safe99_ecs</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99\safe99_common\defines.h">
+      <Filter>safe99\safe99_common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\game.h">
+      <Filter>safe99_galaga</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\private\precompiled.h">
+      <Filter>safe99_galaga\private</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\key_event.h">
+      <Filter>safe99_galaga</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\system\init_system.h">
+      <Filter>safe99_galaga\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\system\release_system.h">
+      <Filter>safe99_galaga\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\component\player.h">
+      <Filter>safe99_galaga\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\system\render_system.h">
+      <Filter>safe99_galaga\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\system\control_system.h">
+      <Filter>safe99_galaga\system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\component\enemy1.h">
+      <Filter>safe99_galaga\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\component\enemy2.h">
+      <Filter>safe99_galaga\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\component\missile.h">
+      <Filter>safe99_galaga\component</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\safe99_galaga\system\collide_system.h">
+      <Filter>safe99_galaga\system</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\source\safe99_galaga\private\main.c">
+      <Filter>safe99_galaga\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\private\precompiled.c">
+      <Filter>safe99_galaga\private</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\game.c">
+      <Filter>safe99_galaga</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\key_event.c">
+      <Filter>safe99_galaga</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\system\init_system.c">
+      <Filter>safe99_galaga\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\system\render_system.c">
+      <Filter>safe99_galaga\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\system\control_system.c">
+      <Filter>safe99_galaga\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\system\release_system.c">
+      <Filter>safe99_galaga\system</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\safe99_galaga\system\collide_system.c">
+      <Filter>safe99_galaga\system</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
