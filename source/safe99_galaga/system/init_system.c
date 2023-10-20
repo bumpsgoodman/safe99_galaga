@@ -29,7 +29,6 @@ void init_player_system(const ecs_view_t* p_view)
 
             // 메시 등록
             pp_mesh[j] = gp_game->p_player_mesh;
-            gp_game->p_player_mesh->vtbl->add_ref(gp_game->p_player_mesh);
 
             // 트랜스폼 초기화
             p_transform->rotation = 0.0f;
@@ -60,7 +59,6 @@ void init_enemy1_system(const ecs_view_t* p_view)
 
             // 메시 등록
             pp_mesh[j] = gp_game->p_enemy1_mesh;
-            gp_game->p_enemy1_mesh->vtbl->add_ref(gp_game->p_enemy1_mesh);
 
             // 트랜스폼 초기화
             p_transform->rotation = 0.0f;
@@ -91,7 +89,6 @@ void init_enemy2_system(const ecs_view_t* p_view)
 
             // 메시 등록
             pp_mesh[j] = gp_game->p_enemy2_mesh;
-            gp_game->p_enemy2_mesh->vtbl->add_ref(gp_game->p_enemy2_mesh);
 
             // 트랜스폼 초기화
             p_transform->rotation = 0.0f;

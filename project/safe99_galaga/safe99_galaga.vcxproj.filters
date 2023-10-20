@@ -108,9 +108,6 @@
     <ClInclude Include="..\..\source\safe99_galaga\system\init_system.h">
       <Filter>safe99_galaga\system</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\safe99_galaga\system\release_system.h">
-      <Filter>safe99_galaga\system</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\source\safe99_galaga\component\player.h">
       <Filter>safe99_galaga\component</Filter>
     </ClInclude>
@@ -153,9 +150,6 @@
       <Filter>safe99_galaga\system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\safe99_galaga\system\control_system.c">
-      <Filter>safe99_galaga\system</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\source\safe99_galaga\system\release_system.c">
       <Filter>safe99_galaga\system</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\safe99_galaga\system\collide_system.c">

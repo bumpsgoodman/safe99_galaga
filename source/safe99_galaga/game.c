@@ -88,6 +88,11 @@ bool init_game(void)
         gp_game->b_running = true;
         gp_game->b_wireframe = false;
 
+        timer_init(&gp_game->frame_timer);
+        timer_start(&gp_game->frame_timer);
+
+        set_limit_frame_rate(1.0f / 60.0f);
+
         // 카메라 초기화
         gp_game->main_camera.transform.position.x = 0.0f;
         gp_game->main_camera.transform.position.y = 0.0f;
@@ -110,7 +115,7 @@ bool init_game(void)
 
         // 인덱스 버퍼 생성
         create_index_buffers();
-        
+
         // 메시 생성
         create_meshs();
     }
@@ -138,8 +143,6 @@ bool init_game(void)
                                                           gp_game->transform_component,
                                                           gp_game->mesh_component,
                                                           gp_game->enemy2_component);
-        gp_game->release_mesh_system = ECS_REGISTER_SYSTEM(gp_game->p_ecs, release_mesh_system, 1,
-                                                           gp_game->mesh_component);
         gp_game->render_mesh_system = ECS_REGISTER_SYSTEM(gp_game->p_ecs, render_mesh_system, 2,
                                                           gp_game->transform_component,
                                                           gp_game->mesh_component);
@@ -198,12 +201,6 @@ failed_init:
 
 void shutdown_game(void)
 {
-    // ecs 엔티티 해제
-    if (gp_game->release_mesh_system != 0)
-    {
-        gp_game->p_ecs->vtbl->update_system(gp_game->p_ecs, gp_game->release_mesh_system);
-    }
-
     // 텍스쳐 해제
     SAFE_RELEASE(gp_game->p_texture);
 
@@ -235,6 +232,19 @@ void shutdown_game(void)
 
 void tick_game(void)
 {
+    static size_t frame_count;
+    static float start_time;
+    if (start_time == 0.0f)
+    {
+        start_time = timer_get_time(&gp_game->frame_timer);
+    }
+
+    const float end_time = timer_get_time(&gp_game->frame_timer);
+    const float delta_time = end_time - start_time;
+
+    gp_game->delta_time = end_time - start_time;
+    start_time = end_time;
+
     // 업데이트 시작
     {
         if (get_key_state(VK_F1) == KEYBOARD_STATE_DOWN)
@@ -265,12 +275,35 @@ void tick_game(void)
         HDC hdc;
         gp_game->p_renderer->vtbl->begin_gdi(gp_game->p_renderer, &hdc);
         {
-            static wchar_t buffer[64];
-            swprintf(buffer, 64, L"FPS: %zd", gp_game->p_renderer->vtbl->get_fps(gp_game->p_renderer));
-            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 0, 0, wcslen(buffer), 0xffff0000);
+            static const int start_text_x = 1;
+            static const int start_text_y = 1;
+            static const int line_spacing = 16;
 
-            swprintf(buffer, 64, L"Delta time: %.8f", gp_game->p_renderer->vtbl->get_delta_time(gp_game->p_renderer));
-            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 0, 15, wcslen(buffer), 0xffff0000);
+            // FPS 출력
+            static wchar_t buffer[64];
+            swprintf(buffer, 64, L"FPS: %zd", (size_t)(ROUND(1.0f / gp_game->delta_time)));
+            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 1, wcslen(buffer), 0xffff0000);
+
+            // Delta time 출력
+            swprintf(buffer, 64, L"Delta time: %.8lf", gp_game->delta_time);
+            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 1 * line_spacing, wcslen(buffer), 0xffff0000);
+
+            // 플레이어 정보 출력
+            {
+                transform2_t* p_transform = (transform2_t*)gp_game->p_ecs->vtbl->get_component_or_null(gp_game->p_ecs,
+                                                                                                       gp_game->player,
+                                                                                                       gp_game->transform_component);
+                ASSERT(p_transform != NULL, "p_transform == NULL");
+
+                swprintf(buffer, 64, L"Position: [%.3f, %.3f]", p_transform->position.x, p_transform->position.y);
+                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 2 * line_spacing, wcslen(buffer), 0xffff0000);
+
+                swprintf(buffer, 64, L"Rotation: %.3f Degree", p_transform->rotation);
+                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 3 * line_spacing, wcslen(buffer), 0xffff0000);
+
+                swprintf(buffer, 64, L"Scale: x%.1f", p_transform->scale);
+                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 4 * line_spacing, wcslen(buffer), 0xffff0000);
+}
         }
         gp_game->p_renderer->vtbl->end_gdi(gp_game->p_renderer, hdc);
 

@@ -33,11 +33,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE h_prev_instance
 
     // 게임 객체 생성/초기화
     gp_game = (game_t*)malloc(sizeof(game_t));
+    ASSERT(gp_game != NULL, "gp_game == NULL");
     if (!init_game())
     {
         ASSERT(false, "Failed to init game");
         goto failed_init_game;
     }
+
+    // 프레임 타이머 초기화
+    timer_t frame_timer;
+    timer_init(&frame_timer);
+    timer_start(&frame_timer);
+
+    float start_time = timer_get_time(&frame_timer);
 
     // 메시지 루프
     MSG msg = { 0 };
@@ -50,12 +58,19 @@ int WINAPI wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE h_prev_instance
         }
         else
         {
-            if (!is_running_game())
+            const float end_time = timer_get_time(&frame_timer);
+            const float delta_time = end_time - start_time;
+            if (delta_time >= get_limit_frame_rate())
             {
-                break;
-            }
+                if (!is_running_game())
+                {
+                    break;
+                }
 
-            tick_game();
+                tick_game();
+
+                start_time = end_time;
+            }
         }
     }
 

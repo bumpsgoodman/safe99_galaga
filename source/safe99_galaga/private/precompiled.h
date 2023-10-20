@@ -42,7 +42,6 @@
 #include "component/missile.h"
 
 #include "system/init_system.h"
-#include "system/release_system.h"
 #include "system/render_system.h"
 #include "system/control_system.h"
 #include "system/collide_system.h"

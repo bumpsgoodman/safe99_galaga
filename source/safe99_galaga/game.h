@@ -16,6 +16,7 @@
 #include "safe99_common/defines.h"
 #include "safe99_ecs/i_ecs.h"
 #include "safe99_file_system/i_file_system.h"
+#include "safe99_math/math.h"
 #include "safe99_soft_renderer_2d/i_soft_renderer_2d.h"
 
 #define NUM_MAX_ENEMY1 1000
@@ -36,6 +37,10 @@ typedef struct game
     // 게임 관련
     bool b_running;
     bool b_wireframe;
+    float limit_frame_rate;
+    
+    timer_t frame_timer;
+    float delta_time;
 
     camera2_t main_camera;
 
@@ -70,7 +75,6 @@ typedef struct game
     ecs_id_t init_player_system;
     ecs_id_t init_enemy1_system;
     ecs_id_t init_enemy2_system;
-    ecs_id_t release_mesh_system;
     ecs_id_t render_mesh_system;
     ecs_id_t control_player_system;
     ecs_id_t control_missile_system;
@@ -98,6 +102,26 @@ FORCEINLINE void update_window_pos_game(void)
 FORCEINLINE void update_window_size_game(void)
 {
     gp_game->p_renderer->vtbl->update_window_size(gp_game->p_renderer);
+}
+
+FORCEINLINE void set_limit_frame_rate(const float rate)
+{
+    gp_game->limit_frame_rate = rate;
+}
+
+FORCEINLINE float get_limit_frame_rate(void)
+{
+    return gp_game->limit_frame_rate;
+}
+
+FORCEINLINE float get_delta_time_game(void)
+{
+    return gp_game->delta_time;
+}
+
+FORCEINLINE size_t get_fps_game(void)
+{
+    return (size_t)ROUND_INT(1.0f / gp_game->delta_time);
 }
 
 #endif // GAME_H

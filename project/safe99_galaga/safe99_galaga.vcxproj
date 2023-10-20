@@ -48,7 +48,6 @@
     <ClInclude Include="..\..\source\safe99_galaga\system\collide_system.h" />
     <ClInclude Include="..\..\source\safe99_galaga\system\init_system.h" />
     <ClInclude Include="..\..\source\safe99_galaga\system\control_system.h" />
-    <ClInclude Include="..\..\source\safe99_galaga\system\release_system.h" />
     <ClInclude Include="..\..\source\safe99_galaga\system\render_system.h" />
   </ItemGroup>
   <ItemGroup>
@@ -68,7 +67,6 @@
     <ClCompile Include="..\..\source\safe99_galaga\system\collide_system.c" />
     <ClCompile Include="..\..\source\safe99_galaga\system\init_system.c" />
     <ClCompile Include="..\..\source\safe99_galaga\system\control_system.c" />
-    <ClCompile Include="..\..\source\safe99_galaga\system\release_system.c" />
     <ClCompile Include="..\..\source\safe99_galaga\system\render_system.c" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

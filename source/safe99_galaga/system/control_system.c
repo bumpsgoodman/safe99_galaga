@@ -15,7 +15,7 @@
 
 void control_player_system(const ecs_view_t* p_view)
 {
-    const float delta_time = gp_game->p_renderer->vtbl->get_delta_time(gp_game->p_renderer);
+    const float delta_time = get_delta_time_game();
 
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
@@ -31,11 +31,19 @@ void control_player_system(const ecs_view_t* p_view)
             if (get_key_state(VK_LEFT))
             {
                 p_transform->rotation -= 180.0f * delta_time;
+                if (p_transform->rotation < 0.0f)
+                {
+                    p_transform->rotation += 360.0f;
+                }
             }
 
             if (get_key_state(VK_RIGHT))
             {
                 p_transform->rotation += 180.0f * delta_time;
+                if (p_transform->rotation >= 360.0f)
+                {
+                    p_transform->rotation -= 360.0f;
+                }
             }
 
             if (get_key_state(VK_UP))
@@ -44,8 +52,29 @@ void control_player_system(const ecs_view_t* p_view)
                 float sin;
                 float cos;
                 get_sin_cos(rad, &sin, &cos);
+
+                /*
+                // 선형 보간법
+                const vector2_t prev_pos =
+                {
+                    p_transform->position.x + (p_player->speed * sin * prev_delta_time),
+                    p_transform->position.y + (p_player->speed * cos * prev_delta_time)
+                };
+                const vector2_t next_pos =
+                {
+                    p_transform->position.x - (p_player->speed * sin * delta_time),
+                    p_transform->position.y - (p_player->speed * cos * delta_time)
+                };
+
+                p_transform->position.x = (prev_pos.x * (1.0f - delta_time)) + (next_pos.x * delta_time);
+                p_transform->position.y = (prev_pos.y * (1.0f - delta_time)) + (next_pos.y * delta_time);
+
+                prev_delta_time = delta_time;
+                */
+
                 p_transform->position.x += p_player->speed * sin * delta_time;
                 p_transform->position.y += p_player->speed * cos * delta_time;
+
             }
 
             if (get_key_state(VK_DOWN))
@@ -69,9 +98,7 @@ void control_player_system(const ecs_view_t* p_view)
                 gp_game->p_ecs->vtbl->set_component(gp_game->p_ecs, missile, gp_game->missile_component,
                                                     &(missile_t){ missile_transform.position, 1000.0f, 250.0f });
 
-                gp_game->p_missile_mesh->vtbl->add_ref(gp_game->p_missile_mesh);
-
-                on_key_up(VK_SPACE);
+                on_key_down(VK_SPACE);
             }
 
             gp_game->main_camera.transform.position = p_transform->position;
@@ -85,7 +112,7 @@ void control_player_system(const ecs_view_t* p_view)
 
 void control_missile_system(const ecs_view_t* p_view)
 {
-    const float delta_time = gp_game->p_renderer->vtbl->get_delta_time(gp_game->p_renderer);
+    const float delta_time = get_delta_time_game();
 
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
@@ -111,7 +138,6 @@ void control_missile_system(const ecs_view_t* p_view)
             const vector2_t distance = { ABS(p_transform->position.x - p_missile->start_pos.x), ABS(p_transform->position.y - p_missile->start_pos.y) };
             if (vector_get_length(vector2_to_vector(&distance)) >= p_missile->max_distance)
             {
-                SAFE_RELEASE(p_mesh);
                 gp_game->p_ecs->vtbl->destroy_entity(gp_game->p_ecs, entities[j]);
             }
         }

@@ -63,9 +63,6 @@ void collide_system(const ecs_view_t* p_view)
                     if (pos.x >= left_top.x && pos.x <= bottom_right.x
                         && pos.y >= left_top.y && pos.y <= bottom_right.y)
                     {
-                        SAFE_RELEASE(pp_mesh[j]);
-                        SAFE_RELEASE(pp_target_mesh[tj]);
-
                         gp_game->p_ecs->vtbl->destroy_entity(gp_game->p_ecs, entity);
                         gp_game->p_ecs->vtbl->destroy_entity(gp_game->p_ecs, target_entity);
                     }
