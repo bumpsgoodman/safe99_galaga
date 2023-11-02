@@ -231,7 +231,6 @@ void shutdown_game(void)
 
 void tick_game(void)
 {
-    static size_t frame_count;
     static float start_time;
 
     const float end_time = timer_get_time(&gp_game->frame_timer);
