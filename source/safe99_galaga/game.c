@@ -89,7 +89,6 @@ bool init_game(void)
         gp_game->b_wireframe = false;
 
         timer_init(&gp_game->frame_timer);
-        timer_start(&gp_game->frame_timer);
 
         set_limit_frame_rate(1.0f / 60.0f);
 
@@ -234,10 +233,6 @@ void tick_game(void)
 {
     static size_t frame_count;
     static float start_time;
-    if (start_time == 0.0f)
-    {
-        start_time = timer_get_time(&gp_game->frame_timer);
-    }
 
     const float end_time = timer_get_time(&gp_game->frame_timer);
     const float delta_time = end_time - start_time;
@@ -303,7 +298,7 @@ void tick_game(void)
 
                 swprintf(buffer, 64, L"Scale: x%.1f", p_transform->scale);
                 gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 4 * line_spacing, wcslen(buffer), 0xffff0000);
-}
+            }
         }
         gp_game->p_renderer->vtbl->end_gdi(gp_game->p_renderer, hdc);
 
