@@ -1,4 +1,4 @@
-//***************************************************************************
+﻿//***************************************************************************
 // 
 // 파일: main.c
 // 
@@ -21,8 +21,8 @@ LRESULT CALLBACK wnd_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 int WINAPI wWinMain(_In_ HINSTANCE hinstance, _In_opt_ HINSTANCE h_prev_instance, _In_ LPWSTR lp_cmd_line, _In_ int cmd_show)
 {
-    const size_t window_width = 1920;
-    const size_t window_height = 1080;
+    const size_t window_width = 1360;
+    const size_t window_height = 768;
 
     // 윈도우 생성
     if (!init_window(hinstance, window_width, window_height))
