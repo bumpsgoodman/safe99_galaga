@@ -17,7 +17,7 @@ void collide_system(const ecs_view_t* p_view)
 {
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
-        const i_mesh2_t** pp_mesh = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
+        const i_mesh_t** pp_mesh = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
         const transform2_t* p_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->transform_component);
 
         const size_t num_instances = p_view->p_this->vtbl->get_num_instances(p_view, i);
@@ -37,7 +37,7 @@ void collide_system(const ecs_view_t* p_view)
             for (size_t ti = 0; ti < p_view->num_archetypes; ++ti)
             {
                 const transform2_t* p_target_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, ti, gp_game->transform_component);
-                const i_mesh2_t** pp_target_mesh = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, ti, gp_game->mesh_component);
+                const i_mesh_t** pp_target_mesh = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, ti, gp_game->mesh_component);
 
                 const size_t num_target_instances = p_view->p_this->vtbl->get_num_instances(p_view, ti);
                 const ecs_id_t* target_entities = (ecs_id_t*)gp_game->p_ecs->vtbl->get_entities_or_null(p_view, ti);

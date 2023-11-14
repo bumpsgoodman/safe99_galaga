@@ -142,10 +142,6 @@ LRESULT CALLBACK wnd_proc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
 
     case WM_MOVE:
-        if (gp_game != NULL)
-        {
-            update_window_pos_game();
-        }
         break;
     case WM_SIZE:
         if (gp_game != NULL)

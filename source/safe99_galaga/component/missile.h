@@ -13,7 +13,7 @@
 #ifndef MISSILE_H
 #define MISSILE_H
 
-typedef ecs_component missile
+typedef struct missile
 {
     vector2_t start_pos;
     float max_distance;

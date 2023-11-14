@@ -30,7 +30,7 @@
 #include "safe99_common/defines.h"
 #include "safe99_ecs/i_ecs.h"
 #include "safe99_file_system/i_file_system.h"
-#include "safe99_soft_renderer_2d/i_soft_renderer_2d.h"
+#include "safe99_soft_renderer/i_soft_renderer.h"
 #include "safe99_generic/util/timer.h"
 #include "safe99_math/math.h"
 

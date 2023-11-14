@@ -17,7 +17,7 @@
 #include "safe99_ecs/i_ecs.h"
 #include "safe99_file_system/i_file_system.h"
 #include "safe99_math/math.h"
-#include "safe99_soft_renderer_2d/i_soft_renderer_2d.h"
+#include "safe99_soft_renderer/i_soft_renderer.h"
 
 #define NUM_MAX_ENEMY1 1000
 #define NUM_MAX_ENEMY2 1000
@@ -30,7 +30,7 @@ typedef struct game
     HINSTANCE h_ecs_dll;
 
     // DLL 인스턴스
-    i_soft_renderer_2d_t* p_renderer;
+    i_soft_renderer_t* p_renderer;
     i_file_system_t* p_file_system;
     i_ecs_t* p_ecs;
 
@@ -44,19 +44,19 @@ typedef struct game
 
     camera2_t main_camera;
 
-    i_texture2_t* p_texture;
+    i_texture_t* p_texture;
 
-    i_vertex_buffer2_t* p_player_vertex_buffer;
-    i_vertex_buffer2_t* p_enemy1_vertex_buffer;
-    i_vertex_buffer2_t* p_enemy2_vertex_buffer;
-    i_vertex_buffer2_t* p_missile_vertex_buffer;
+    i_vertex_buffer_t* p_player_vertex_buffer;
+    i_vertex_buffer_t* p_enemy1_vertex_buffer;
+    i_vertex_buffer_t* p_enemy2_vertex_buffer;
+    i_vertex_buffer_t* p_missile_vertex_buffer;
 
-    i_index_buffer2_t* p_index_buffer;
+    i_index_buffer_t* p_index_buffer;
 
-    i_mesh2_t* p_player_mesh;
-    i_mesh2_t* p_enemy1_mesh;
-    i_mesh2_t* p_enemy2_mesh;
-    i_mesh2_t* p_missile_mesh;
+    i_mesh_t* p_player_mesh;
+    i_mesh_t* p_enemy1_mesh;
+    i_mesh_t* p_enemy2_mesh;
+    i_mesh_t* p_missile_mesh;
 
     // ecs 엔티티
     ecs_id_t player;
@@ -92,11 +92,6 @@ void tick_game(void);
 FORCEINLINE bool is_running_game(void)
 {
     return gp_game->b_running;
-}
-
-FORCEINLINE void update_window_pos_game(void)
-{
-    gp_game->p_renderer->vtbl->update_window_pos(gp_game->p_renderer);
 }
 
 FORCEINLINE void update_window_size_game(void)

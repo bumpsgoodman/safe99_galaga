@@ -17,7 +17,7 @@ void init_player_system(const ecs_view_t* p_view)
 {
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
-        i_mesh2_t** pp_mesh = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
+        i_mesh_t** pp_mesh = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
         transform2_t* p_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->transform_component);
         player_t* p_players = (player_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->player_component);
 
@@ -47,7 +47,7 @@ void init_enemy1_system(const ecs_view_t* p_view)
 {
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
-        i_mesh2_t** pp_mesh = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
+        i_mesh_t** pp_mesh = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
         transform2_t* p_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->transform_component);
         enemy1_t* p_enemies = (enemy1_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->enemy1_component);
 
@@ -77,7 +77,7 @@ void init_enemy2_system(const ecs_view_t* p_view)
 {
     for (size_t i = 0; i < p_view->num_archetypes; ++i)
     {
-        i_mesh2_t** pp_mesh = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
+        i_mesh_t** pp_mesh = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
         transform2_t* p_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->transform_component);
         enemy2_t* p_enemies = (enemy2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->enemy2_component);
 

@@ -36,11 +36,11 @@ bool init_game(void)
     // DLL 로드
     {
     #if defined(_WIN64)
-        gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_2d_x64.dll");
+        gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_x64.dll");
         gp_game->h_file_system_dll = LoadLibrary(L"safe99_file_system_x64.dll");
         gp_game->h_ecs_dll = LoadLibrary(L"safe99_ecs_x64.dll");
     #else
-        gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_2d_x86.dll");
+        gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_x86.dll");
         gp_game->h_file_system_dll = LoadLibrary(L"safe99_file_system_x86.dll");
         gp_game->h_ecs_dll = LoadLibrary(L"safe99_ecs_x86.dll");
     #endif // _WIN64
@@ -60,7 +60,7 @@ bool init_game(void)
 
         // 렌더러 초기화
         pf_create_renderer(&gp_game->p_renderer);
-        if (!gp_game->p_renderer->vtbl->initialize(gp_game->p_renderer, g_hwnd))
+        if (!gp_game->p_renderer->vtbl->initialize(gp_game->p_renderer, g_hwnd, false))
         {
             ASSERT(false, "Failed init renderer");
             goto failed_init;
@@ -123,7 +123,7 @@ bool init_game(void)
     {
         // 컴포넌트 등록
         gp_game->transform_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, transform2_t);
-        gp_game->mesh_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, i_mesh2_t*);
+        gp_game->mesh_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, i_mesh_t*);
         gp_game->player_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, player_t);
         gp_game->enemy1_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, enemy1_t);
         gp_game->enemy2_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, enemy2_t);
@@ -256,18 +256,14 @@ void tick_game(void)
     // 렌더링 시작
     {
         // 화면 렌더링
-        gp_game->p_renderer->vtbl->begin_draw(gp_game->p_renderer);
         {
-            gp_game->p_renderer->vtbl->clear(gp_game->p_renderer, 0xff000000);
+            gp_game->p_renderer->vtbl->clear(gp_game->p_renderer, color_set(0.0f, 0.0f, 0.0f, 1.0f));
 
             // 메시 렌더링
             gp_game->p_ecs->vtbl->update_system(gp_game->p_ecs, gp_game->render_mesh_system);
         }
-        gp_game->p_renderer->vtbl->end_draw(gp_game->p_renderer);
 
         // 텍스트 정보 출력
-        HDC hdc;
-        gp_game->p_renderer->vtbl->begin_gdi(gp_game->p_renderer, &hdc);
         {
             static const int start_text_x = 1;
             static const int start_text_y = 1;
@@ -276,11 +272,11 @@ void tick_game(void)
             // FPS 출력
             static wchar_t buffer[64];
             swprintf(buffer, 64, L"FPS: %zd", (size_t)(ROUND(1.0f / gp_game->delta_time)));
-            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 1, wcslen(buffer), 0xffff0000);
+            gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 1, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
 
             // Delta time 출력
             swprintf(buffer, 64, L"Delta time: %.8lf", gp_game->delta_time);
-            gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 1 * line_spacing, wcslen(buffer), 0xffff0000);
+            gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 1 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
 
             // 플레이어 정보 출력
             {
@@ -290,16 +286,15 @@ void tick_game(void)
                 ASSERT(p_transform != NULL, "p_transform == NULL");
 
                 swprintf(buffer, 64, L"Position: [%.3f, %.3f]", p_transform->position.x, p_transform->position.y);
-                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 2 * line_spacing, wcslen(buffer), 0xffff0000);
+                gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 2 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
 
                 swprintf(buffer, 64, L"Rotation: %.3f Degree", p_transform->rotation);
-                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 3 * line_spacing, wcslen(buffer), 0xffff0000);
+                gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 3 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
 
                 swprintf(buffer, 64, L"Scale: x%.1f", p_transform->scale);
-                gp_game->p_renderer->vtbl->print_text(gp_game->p_renderer, hdc, buffer, 1, 4 * line_spacing, wcslen(buffer), 0xffff0000);
+                gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 4 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
             }
         }
-        gp_game->p_renderer->vtbl->end_gdi(gp_game->p_renderer, hdc);
 
         gp_game->p_renderer->vtbl->on_draw(gp_game->p_renderer);
     }
@@ -327,7 +322,7 @@ static void create_vertex_buffers(void)
         const size_t num_vertices = sizeof(vertices) / sizeof(vertices[0]);
 
         // 버텍스 버퍼 생성
-        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, semantics, offsets, num_semantics,
+        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, offsets, semantics, num_semantics,
                                                         vertices, num_vertices, &gp_game->p_player_vertex_buffer);
     }
 
@@ -344,7 +339,7 @@ static void create_vertex_buffers(void)
         const size_t num_vertices = sizeof(vertices) / sizeof(vertices[0]);
 
         // 버텍스 버퍼 생성
-        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, semantics, offsets, num_semantics,
+        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, offsets, semantics, num_semantics,
                                                         vertices, num_vertices, &gp_game->p_enemy1_vertex_buffer);
     }
 
@@ -361,7 +356,7 @@ static void create_vertex_buffers(void)
         const size_t num_vertices = sizeof(vertices) / sizeof(vertices[0]);
 
         // 버텍스 버퍼 생성
-        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, semantics, offsets, num_semantics,
+        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, offsets, semantics, num_semantics,
                                                         vertices, num_vertices, &gp_game->p_enemy2_vertex_buffer);
     }
 
@@ -378,7 +373,7 @@ static void create_vertex_buffers(void)
         const size_t num_vertices = sizeof(vertices) / sizeof(vertices[0]);
 
         // 버텍스 버퍼 생성
-        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, semantics, offsets, num_semantics,
+        gp_game->p_renderer->vtbl->create_vertex_buffer(gp_game->p_renderer, offsets, semantics, num_semantics,
                                                         vertices, num_vertices, &gp_game->p_missile_vertex_buffer);
     }
 }
@@ -404,6 +399,7 @@ static void create_meshs(void)
                                            gp_game->p_player_vertex_buffer,
                                            gp_game->p_index_buffer,
                                            gp_game->p_texture,
+                                           color_set(0.0f, 1.0f, 0.0f, 1.0f),
                                            &gp_game->p_player_mesh);
 
     // 적1 메시 생성
@@ -411,6 +407,7 @@ static void create_meshs(void)
                                            gp_game->p_enemy1_vertex_buffer,
                                            gp_game->p_index_buffer,
                                            gp_game->p_texture,
+                                           color_set(0.0f, 1.0f, 0.0f, 1.0f),
                                            &gp_game->p_enemy1_mesh);
 
     // 적2 메시 생성
@@ -418,6 +415,7 @@ static void create_meshs(void)
                                            gp_game->p_enemy2_vertex_buffer,
                                            gp_game->p_index_buffer,
                                            gp_game->p_texture,
+                                           color_set(0.0f, 1.0f, 0.0f, 1.0f),
                                            &gp_game->p_enemy2_mesh);
 
     // 미사일 메시 생성
@@ -425,5 +423,6 @@ static void create_meshs(void)
                                            gp_game->p_missile_vertex_buffer,
                                            gp_game->p_index_buffer,
                                            gp_game->p_texture,
+                                           color_set(0.0f, 1.0f, 0.0f, 1.0f),
                                            &gp_game->p_missile_mesh);
 }

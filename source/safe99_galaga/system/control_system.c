@@ -118,7 +118,7 @@ void control_missile_system(const ecs_view_t* p_view)
     {
         transform2_t* p_transforms = (transform2_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->transform_component);
         missile_t* p_missiles = (missile_t*)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->missile_component);
-        i_mesh2_t** pp_meshs = (i_mesh2_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
+        i_mesh_t** pp_meshs = (i_mesh_t**)p_view->p_this->vtbl->get_instances_or_null(p_view, i, gp_game->mesh_component);
 
         const size_t num_instances = p_view->p_this->vtbl->get_num_instances(p_view, i);
         ecs_id_t* entities = (ecs_id_t*)gp_game->p_ecs->vtbl->get_entities_or_null(p_view, i);
@@ -126,7 +126,7 @@ void control_missile_system(const ecs_view_t* p_view)
         {
             transform2_t* p_transform = p_transforms + j;
             missile_t* p_missile = p_missiles + j;
-            i_mesh2_t* p_mesh = pp_meshs[j];
+            i_mesh_t* p_mesh = pp_meshs[j];
 
             const float rad = p_transform->rotation * (float)PI_DIV_180;
             float sin;

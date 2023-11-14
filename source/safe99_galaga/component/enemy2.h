@@ -16,7 +16,7 @@
 #include "safe99_common/defines.h"
 #include "safe99_ecs/i_ecs.h"
 
-typedef ecs_component enemy2
+typedef struct enemy2
 {
     float speed;
 } enemy2_t;
