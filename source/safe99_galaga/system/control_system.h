@@ -14,7 +14,7 @@
 #define CONTROL_SYSTEM
 
 #include "safe99_common/defines.h"
-#include "safe99_ecs/i_ecs.h"
+#include "safe99_geometry/i_ecs.h"
 
 void control_player_system(const ecs_view_t* p_view);
 void control_missile_system(const ecs_view_t* p_view);

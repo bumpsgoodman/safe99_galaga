@@ -31,11 +31,9 @@ void init_player_system(const ecs_view_t* p_view)
             pp_mesh[j] = gp_game->p_player_mesh;
 
             // 트랜스폼 초기화
-            p_transform->rotation = 0.0f;
-            p_transform->scale = 32.0f;
-
-            p_transform->position.x = 0.0f;
-            p_transform->position.y = 0.0f;
+            transform2_set_position(p_transform, (vector2_t){ 0.0f, 0.0f });
+            transform2_set_rotation(p_transform, 0.0f);
+            transform2_set_scale(p_transform, (vector2_t){ 32.0f, 32.0f });
 
             // 플레이어 초기화
             p_player->speed = 180.0f;
@@ -61,11 +59,9 @@ void init_enemy1_system(const ecs_view_t* p_view)
             pp_mesh[j] = gp_game->p_enemy1_mesh;
 
             // 트랜스폼 초기화
-            p_transform->rotation = 0.0f;
-            p_transform->scale = 32.0f;
-
-            p_transform->position.x = rand() / (float)RAND_MAX * 10000.0f - 5000.0f;
-            p_transform->position.y = rand() / (float)RAND_MAX * 10000.0f - 5000.0f;
+            transform2_set_position(p_transform, (vector2_t){ rand() / (float)RAND_MAX * 10000.0f - 5000.0f, rand() / (float)RAND_MAX * 10000.0f - 5000.0f });
+            transform2_set_rotation(p_transform, 0.0f);
+            transform2_set_scale(p_transform, (vector2_t){ 32.0f, 32.0f });
 
             // 적 초기화
             p_enemy->speed = 50.0f;
@@ -91,11 +87,13 @@ void init_enemy2_system(const ecs_view_t* p_view)
             pp_mesh[j] = gp_game->p_enemy2_mesh;
 
             // 트랜스폼 초기화
-            p_transform->rotation = 0.0f;
-            p_transform->scale = 32.0f;
+            transform2_set_position(p_transform, (vector2_t){ rand() / (float)RAND_MAX * 10000.0f - 5000.0f, rand() / (float)RAND_MAX * 10000.0f - 5000.0f });
+            transform2_set_rotation(p_transform, 0.0f);
+            transform2_set_scale(p_transform, (vector2_t){ 32.0f, 32.0f });
 
-            p_transform->position.x = rand() / (float)RAND_MAX * 10000.0f - 5000.0f;
-            p_transform->position.y = rand() / (float)RAND_MAX * 10000.0f - 5000.0f;
+            p_transform->rotation = 0.0f;
+            p_transform->scale.x = 32.0f;
+            p_transform->scale.y = 32.0f;
 
             // 적 초기화
             p_enemy->speed = 50.0f;

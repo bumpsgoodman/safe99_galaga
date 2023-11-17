@@ -38,16 +38,16 @@ bool init_game(void)
     #if defined(_WIN64)
         gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_x64.dll");
         gp_game->h_file_system_dll = LoadLibrary(L"safe99_file_system_x64.dll");
-        gp_game->h_ecs_dll = LoadLibrary(L"safe99_ecs_x64.dll");
+        gp_game->h_geometry_dll = LoadLibrary(L"safe99_geometry_x64.dll");
     #else
         gp_game->h_renderer_dll = LoadLibrary(L"safe99_soft_renderer_x86.dll");
         gp_game->h_file_system_dll = LoadLibrary(L"safe99_file_system_x86.dll");
-        gp_game->h_ecs_dll = LoadLibrary(L"safe99_ecs_x86.dll");
+        gp_game->h_ecs_dll = LoadLibrary(L"safe99_geometry_x86.dll");
     #endif // _WIN64
 
         if (gp_game->h_renderer_dll == NULL
             || gp_game->h_file_system_dll == NULL
-            || gp_game->h_ecs_dll == NULL)
+            || gp_game->h_geometry_dll == NULL)
         {
             ASSERT(false, "Failed load DLL");
             goto failed_init;
@@ -56,7 +56,7 @@ bool init_game(void)
         // 인스턴스 생성 함수
         create_instance_func pf_create_renderer = (create_instance_func)GetProcAddress(gp_game->h_renderer_dll, "create_instance");
         create_instance_func pf_create_file_system = (create_instance_func)GetProcAddress(gp_game->h_file_system_dll, "create_instance");
-        create_instance_func pf_create_ecs = (create_instance_func)GetProcAddress(gp_game->h_ecs_dll, "create_instance");
+        create_instance_func pf_create_geometry = (create_instance_func)GetProcAddress(gp_game->h_geometry_dll, "create_instance");
 
         // 렌더러 초기화
         pf_create_renderer(&gp_game->p_renderer);
@@ -74,11 +74,11 @@ bool init_game(void)
             goto failed_init;
         }
 
-        // ecs 월드 초기화
-        pf_create_ecs(&gp_game->p_ecs);
-        if (!gp_game->p_ecs->vtbl->initialize(gp_game->p_ecs, 10000, 100, 100))  // TODO: 매개 변수 수정하기
+        // 지오메트리 초기화
+        pf_create_geometry(&gp_game->p_geometry);
+        if (!gp_game->p_geometry->vtbl->initialize(gp_game->p_geometry))
         {
-            ASSERT(false, "Failed init ecs");
+            ASSERT(false, "Failed init geometry");
             goto failed_init;
         }
     }
@@ -93,9 +93,9 @@ bool init_game(void)
         set_limit_frame_rate(1.0f / 60.0f);
 
         // 카메라 초기화
-        gp_game->main_camera.transform.position.x = 0.0f;
-        gp_game->main_camera.transform.position.y = 0.0f;
-        gp_game->main_camera.view_matrix = matrix_get_identity();
+        transform2_set_position(&gp_game->main_camera.transform, (vector2_t){ 0.0f, 0.0f });
+        transform2_set_rotation(&gp_game->main_camera.transform, 0.0f);
+        transform2_set_scale(&gp_game->main_camera.transform, (vector2_t){ 1.0f, 1.0f });
         gp_game->main_camera.view_port_left_top.x = -1.0f;
         gp_game->main_camera.view_port_left_top.y = -1.0f;
         gp_game->main_camera.view_port_right_bottom.x = 1.0f;
@@ -121,6 +121,14 @@ bool init_game(void)
 
     // ecs 초기화
     {
+        // 월드 초기화
+        gp_game->p_ecs = gp_game->p_geometry->vtbl->get_ecs(gp_game->p_geometry);
+        if (!gp_game->p_ecs->vtbl->initialize(gp_game->p_ecs, 2500, 10, 10))  // TODO: 매개 변수 수정하기
+        {
+            ASSERT(false, "Failed init ecs");
+            goto failed_init;
+        }
+
         // 컴포넌트 등록
         gp_game->transform_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, transform2_t);
         gp_game->mesh_component = ECS_REGISTER_COMPONENT(gp_game->p_ecs, i_mesh_t*);
@@ -221,12 +229,12 @@ void shutdown_game(void)
     // DLL 객체 해제
     SAFE_RELEASE(gp_game->p_renderer);
     SAFE_RELEASE(gp_game->p_file_system);
-    SAFE_RELEASE(gp_game->p_ecs);
+    SAFE_RELEASE(gp_game->p_geometry);
 
     // DLL 핸들 해제
     FreeLibrary(gp_game->h_renderer_dll);
     FreeLibrary(gp_game->h_file_system_dll);
-    FreeLibrary(gp_game->h_ecs_dll);
+    FreeLibrary(gp_game->h_geometry_dll);
 }
 
 void tick_game(void)
@@ -291,7 +299,7 @@ void tick_game(void)
                 swprintf(buffer, 64, L"Rotation: %.3f Degree", p_transform->rotation);
                 gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 3 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
 
-                swprintf(buffer, 64, L"Scale: x%.1f", p_transform->scale);
+                swprintf(buffer, 64, L"Scale: x%.1f", p_transform->scale.x);
                 gp_game->p_renderer->vtbl->draw_text(gp_game->p_renderer, 1, 4 * line_spacing, buffer, wcslen(buffer), color_set(1.0f, 0.0f, 0.0f, 1.0f));
             }
         }

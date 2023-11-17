@@ -14,7 +14,7 @@
 #define GAME_H
 
 #include "safe99_common/defines.h"
-#include "safe99_ecs/i_ecs.h"
+#include "safe99_geometry/i_geometry.h"
 #include "safe99_file_system/i_file_system.h"
 #include "safe99_math/math.h"
 #include "safe99_soft_renderer/i_soft_renderer.h"
@@ -27,12 +27,12 @@ typedef struct game
     // DLL 핸들
     HINSTANCE h_renderer_dll;
     HINSTANCE h_file_system_dll;
-    HINSTANCE h_ecs_dll;
+    HINSTANCE h_geometry_dll;
 
     // DLL 인스턴스
     i_soft_renderer_t* p_renderer;
     i_file_system_t* p_file_system;
-    i_ecs_t* p_ecs;
+    i_geometry_t* p_geometry;
 
     // 게임 관련
     bool b_running;
@@ -57,6 +57,9 @@ typedef struct game
     i_mesh_t* p_enemy1_mesh;
     i_mesh_t* p_enemy2_mesh;
     i_mesh_t* p_missile_mesh;
+
+    // ecs 월드
+    i_ecs_t* p_ecs;
 
     // ecs 엔티티
     ecs_id_t player;

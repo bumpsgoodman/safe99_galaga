@@ -30,67 +30,40 @@ void control_player_system(const ecs_view_t* p_view)
 
             if (get_key_state(VK_LEFT))
             {
-                p_transform->rotation -= 180.0f * delta_time;
-                if (p_transform->rotation < 0.0f)
-                {
-                    p_transform->rotation += 360.0f;
-                }
+                transform2_add_rotation(p_transform, -180.0f * delta_time);
             }
 
             if (get_key_state(VK_RIGHT))
             {
-                p_transform->rotation += 180.0f * delta_time;
-                if (p_transform->rotation >= 360.0f)
-                {
-                    p_transform->rotation -= 360.0f;
-                }
+                transform2_add_rotation(p_transform, 180.0f * delta_time);
             }
 
             if (get_key_state(VK_UP))
             {
-                const float rad = p_transform->rotation * (float)PI_DIV_180;
+                const float rad = transform2_get_rotation(p_transform) * (float)PI_DIV_180;
                 float sin;
                 float cos;
                 get_sin_cos(rad, &sin, &cos);
 
-                /*
-                // 선형 보간법
-                const vector2_t prev_pos =
-                {
-                    p_transform->position.x + (p_player->speed * sin * prev_delta_time),
-                    p_transform->position.y + (p_player->speed * cos * prev_delta_time)
-                };
-                const vector2_t next_pos =
-                {
-                    p_transform->position.x - (p_player->speed * sin * delta_time),
-                    p_transform->position.y - (p_player->speed * cos * delta_time)
-                };
-
-                p_transform->position.x = (prev_pos.x * (1.0f - delta_time)) + (next_pos.x * delta_time);
-                p_transform->position.y = (prev_pos.y * (1.0f - delta_time)) + (next_pos.y * delta_time);
-
-                prev_delta_time = delta_time;
-                */
-
-                p_transform->position.x += p_player->speed * sin * delta_time;
-                p_transform->position.y += p_player->speed * cos * delta_time;
-
+                const vector2_t v = { p_player->speed * sin * delta_time, p_player->speed * cos * delta_time };
+                transform2_add_position(p_transform, v);
             }
 
             if (get_key_state(VK_DOWN))
             {
-                const float rad = p_transform->rotation * (float)PI_DIV_180;
+                const float rad = transform2_get_rotation(p_transform) * (float)PI_DIV_180;
                 float sin;
                 float cos;
                 get_sin_cos(rad, &sin, &cos);
-                p_transform->position.x -= p_player->speed * sin * delta_time;
-                p_transform->position.y -= p_player->speed * cos * delta_time;
+
+                const vector2_t v = { -p_player->speed * sin * delta_time, -p_player->speed * cos * delta_time };
+                transform2_add_position(p_transform, v);
             }
 
             if (get_key_state(VK_SPACE) == KEYBOARD_STATE_DOWN)
             {
                 transform2_t missile_transform = *p_transform;
-                missile_transform.scale = 16.0f;
+                transform2_set_scale(&missile_transform, (vector2_t){ 16.0f, 16.0f });
                 
                 const ecs_id_t missile = gp_game->p_ecs->vtbl->create_entity(gp_game->p_ecs);
                 gp_game->p_ecs->vtbl->set_component(gp_game->p_ecs, missile, gp_game->transform_component, &missile_transform);
@@ -101,11 +74,9 @@ void control_player_system(const ecs_view_t* p_view)
                 on_key_down(VK_SPACE);
             }
 
-            gp_game->main_camera.transform.position = p_transform->position;
-            gp_game->main_camera.view_matrix = matrix_set(1.0f, 0.0f, -p_transform->position.x, 0.0f,
-                                                          0.0f, 1.0f, -p_transform->position.y, 0.0f,
-                                                          0.0f, 0.0f, 1.0f, 0.0f,
-                                                          0.0f, 0.0f, 0.0f, 1.0f);
+            const vector2_t v = transform2_get_position(p_transform);
+            transform2_set_position(&gp_game->main_camera.transform, (vector2_t){ -v.x, -v.y });
+            //gp_game->main_camera.transform.position = -p_transform->position;
         }
     }
 }
@@ -128,12 +99,13 @@ void control_missile_system(const ecs_view_t* p_view)
             missile_t* p_missile = p_missiles + j;
             i_mesh_t* p_mesh = pp_meshs[j];
 
-            const float rad = p_transform->rotation * (float)PI_DIV_180;
+            const float rad = transform2_get_rotation(p_transform) * (float)PI_DIV_180;
             float sin;
             float cos;
             get_sin_cos(rad, &sin, &cos);
-            p_transform->position.x += p_missile->speed * sin * delta_time;
-            p_transform->position.y += p_missile->speed * cos * delta_time;
+
+            const vector2_t v = { p_missile->speed * sin * delta_time, p_missile->speed * cos * delta_time };
+            transform2_add_position(p_transform, v);
 
             const vector2_t distance = { ABS(p_transform->position.x - p_missile->start_pos.x), ABS(p_transform->position.y - p_missile->start_pos.y) };
             if (vector_get_length(vector2_to_vector(&distance)) >= p_missile->max_distance)

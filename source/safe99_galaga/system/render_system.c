@@ -29,12 +29,10 @@ void render_mesh_system(const ecs_view_t* p_view)
             float sin;
             float cos;
             get_sin_cos(p_transform->rotation * (float)PI_DIV_180, &sin, &cos);
-            const matrix_t world_mat = matrix_set(cos * p_transform->scale, sin * p_transform->scale, p_transform->position.x, 0.0f,
-                                                  -sin * p_transform->scale, cos * p_transform->scale, p_transform->position.y, 0.0f,
-                                                  0.0f, 0.0f, 1.0f, 0.0f,
-                                                  0.0f, 0.0f, 0.0f, 1.0f);
+            const matrix_t model_mat = transform2_get_model_matrix(p_transform);
+            const matrix_t view_mat = transform2_get_model_matrix(&gp_game->main_camera.transform);
 
-            const matrix_t transform_mat = matrix_mul(gp_game->main_camera.view_matrix, matrix_get_transpose(world_mat));
+            const matrix_t transform_mat = matrix_mul(view_mat, matrix_get_transpose(model_mat));
 
             gp_game->p_renderer->vtbl->draw_mesh2(gp_game->p_renderer, p_mesh, &transform_mat, gp_game->b_wireframe);
         }

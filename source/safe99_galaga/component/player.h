@@ -14,7 +14,7 @@
 #define PLAYER_H
 
 #include "safe99_common/defines.h"
-#include "safe99_ecs/i_ecs.h"
+#include "safe99_geometry/i_ecs.h"
 
 typedef struct player
 {

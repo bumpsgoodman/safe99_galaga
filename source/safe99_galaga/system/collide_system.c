@@ -56,7 +56,7 @@ void collide_system(const ecs_view_t* p_view)
 
                     const transform2_t* p_target_transform = p_target_transforms + tj;
 
-                    const float half_scale = p_target_transform->scale * 0.5f;
+                    const float half_scale = p_target_transform->scale.x * 0.5f;
                     const vector2_t left_top = { p_target_transform->position.x - half_scale, p_target_transform->position.y - half_scale };
                     const vector2_t bottom_right = { p_target_transform->position.x + half_scale, p_target_transform->position.y + half_scale };
 
